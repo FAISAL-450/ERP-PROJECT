@@ -53,10 +53,18 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'accounts.middleware.EnsureProfileMiddleware',  # ✅ Ensures profile exists
+    'accounts.middleware.EnsureProfileMiddleware',  # Ensures profile exists
+    'accounts.middleware.AzureEmailToDepartmentMiddleware',  # ✅ Maps email to department
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+AZURE_AD_EMAIL_TO_DEPARTMENT = {
+    "elias@dzignscapeprofessionals.onmicrosoft.com": "construction",
+    "jakir@dzignscapeprofessionals.onmicrosoft.com": "sales",
+}
+
 
 
 # 🌐 URL & WSGI
