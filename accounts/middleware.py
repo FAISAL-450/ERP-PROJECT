@@ -27,15 +27,18 @@ class AzureEmailToDepartmentMiddleware:
             department_map = getattr(settings, 'AZURE_AD_EMAIL_TO_DEPARTMENT', {})
             mapped_department = department_map.get(email)
 
-            # Log and apply mapping
+            # Log the mapping attempt
+            logger.info(f"Azure AD login detected: {email}")
             if mapped_department:
                 profile, _ = Profile.objects.get_or_create(user=request.user)
                 if profile.department != mapped_department:
                     profile.department = mapped_department
                     profile.save()
-                    logger.info(f"Updated department for {email} → {mapped_department}")
+                    logger.info(f"Profile updated → {email} assigned to '{mapped_department}'")
+                else:
+                    logger.info(f"Profile already correct → {email} is '{mapped_department}'")
             else:
-                logger.warning(f"Unmapped Azure AD email: {email}")
+                logger.warning(f"Unmapped Azure AD email: {email} — no department assigned")
 
         return self.get_response(request)
 
