@@ -52,11 +52,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'accounts.middleware.EnsureProfileMiddleware',
-    'accounts.middleware.AzureEmailToDepartmentMiddleware',
+    'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # ✅ Combined logic
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 # 🧭 Azure AD Email → Department Mapping
 AZURE_AD_EMAIL_TO_DEPARTMENT = {
@@ -109,9 +110,13 @@ USE_TZ = True
 
 # 📦 Static Files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # project-level
+    os.path.join(BASE_DIR, 'construction', 'static'),  # app-level
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'  # Optional: use ManifestStaticFilesStorage for cache busting
+
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

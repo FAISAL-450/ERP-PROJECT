@@ -1,36 +1,32 @@
-from django.conf import settings
-from accounts.models import Profile
 import logging
+from django.conf import settings
+from .models import Profile
 
 logger = logging.getLogger(__name__)
 
-class EnsureProfileMiddleware:
+class EnsureProfileAndDepartmentMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        logger.info("EnsureProfileAndDepartmentMiddleware initialized")
 
     def __call__(self, request):
         if request.user.is_authenticated:
-            Profile.objects.get_or_create(user=request.user)
-        return self.get_response(request)
+            # Ensure Profile exists
+            profile, _ = Profile.objects.get_or_create(user=request.user)
 
+            # Extract email and normalize
+            email = request.user.email.lower().strip()
 
-class AzureEmailToDepartmentMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+            # Hardcoded mapping (can move to settings later)
+            department_map = {
+                'elias@DzignscapeProfessionals.onmicrosoft.com': 'construction',
+                'jakir@DzignscapeProfessionals.onmicrosoft.com': 'sales',
+                # Add more mappings here
+            }
 
-    def __call__(self, request):
-        if request.user.is_authenticated:
-            # Extract Azure AD email from header
-            email = request.META.get('X-MS-CLIENT-PRINCIPAL-NAME', '').lower()
-
-            # Load mapping from settings
-            department_map = getattr(settings, 'AZURE_AD_EMAIL_TO_DEPARTMENT', {})
+            # Map department if matched
             mapped_department = department_map.get(email)
-
-            # Log the mapping attempt
-            logger.info(f"Azure AD login detected: {email}")
             if mapped_department:
-                profile, _ = Profile.objects.get_or_create(user=request.user)
                 if profile.department != mapped_department:
                     profile.department = mapped_department
                     profile.save()
@@ -38,9 +34,11 @@ class AzureEmailToDepartmentMiddleware:
                 else:
                     logger.info(f"Profile already correct → {email} is '{mapped_department}'")
             else:
-                logger.warning(f"Unmapped Azure AD email: {email} — no department assigned")
+                logger.warning(f"Unmapped email: {email} — no department assigned")
 
         return self.get_response(request)
+
+
 
 
 
