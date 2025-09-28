@@ -66,7 +66,6 @@ AZURE_AD_EMAIL_TO_DEPARTMENT = {
 }
 
 
-
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'
 WSGI_APPLICATION = 'erp_project.wsgi.application'
