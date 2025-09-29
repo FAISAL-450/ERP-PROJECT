@@ -52,19 +52,22 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # ✅ Combined logic
+    # ✅ Ensures Azure AD email is mapped to department and Profile is created
+    'accounts.middleware.EnsureProfileAndDepartmentMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 
+# 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
     'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
     'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
+   
 }
 
+# 🔐 Azure AD Login Redirect
 LOGIN_URL = '/.auth/login/aad'
-
 
 
 # 🌐 URL & WSGI
