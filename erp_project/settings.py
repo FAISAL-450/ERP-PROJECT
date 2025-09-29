@@ -116,9 +116,11 @@ USE_TZ = True
 # 📦 Static Files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # project-level
-    os.path.join(BASE_DIR, 'construction', 'static'),  # app-level
+    
+    BASE_DIR / "construction" / "static",
 ]
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'  # Optional: use ManifestStaticFilesStorage for cache busting
 

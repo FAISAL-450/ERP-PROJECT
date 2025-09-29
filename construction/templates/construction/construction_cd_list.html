@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
-{% block content %}
-  <h2>Construction – Contractor Detailed</h2>
-  {% include 'contractor/contractor_dashboard.html' %}
+
+{% block extra_css %}
+  {# Optional: add scoped styles or overrides here #}
 {% endblock %}
+
+{% block content %}
+  <div class="construction-wrapper contractor-view">
+    <h2>Construction – Contractor Detailed</h2>
+    {% include 'contractor/contractor_dashboard.html' %}
+  </div>
+{% endblock %}
+

@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
-{% block content %}
-  <h2>Construction – Project Detailed</h2>
-  {% include 'project/project_dashboard.html' %}
+
+{% block extra_css %}
+  {# Optional: add scoped styles or overrides here #}
 {% endblock %}
+
+{% block content %}
+  <div class="construction-wrapper project-view">
+    <h2>Construction – Project Detailed</h2>
+    {% include 'project/project_dashboard.html' %}
+  </div>
+{% endblock %}
+
 
 
 
