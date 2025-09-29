@@ -58,12 +58,14 @@ MIDDLEWARE = [
 ]
 
 
-
-# 🧭 Azure AD Email → Department Mapping
-AZURE_AD_EMAIL_TO_DEPARTMENT = {
-    "elias@dzignscapeprofessionals.onmicrosoft.com": "construction",
-    "jakir@dzignscapeprofessionals.onmicrosoft.com": "sales",
+DEPARTMENT_EMAIL_MAP = {
+    'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+    'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
 }
+
+LOGIN_URL = '/.auth/login/aad'
+
+
 
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'

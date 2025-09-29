@@ -1,4 +1,6 @@
 import logging
+import base64
+import json
 from django.conf import settings
 from .models import Profile
 
@@ -14,17 +16,39 @@ class EnsureProfileAndDepartmentMiddleware:
             # Ensure Profile exists
             profile, _ = Profile.objects.get_or_create(user=request.user)
 
-            # Extract email and normalize
-            email = request.user.email.lower().strip()
+            # Extract email from Azure AD claims
+            raw_principal = request.META.get('X-MS-CLIENT-PRINCIPAL', None)
+            email = None
 
-            # Hardcoded mapping (can move to settings later)
+            if raw_principal:
+                try:
+                    decoded = base64.b64decode(raw_principal).decode('utf-8')
+                    principal_data = json.loads(decoded)
+                    email_claim = next(
+                        (claim['userId'] for claim in principal_data['claims'] if claim['typ'] == 'email'),
+                        None
+                    )
+                    if email_claim:
+                        email = email_claim.lower().strip()
+                        logger.info(f"Azure AD email extracted: {email}")
+                    else:
+                        logger.warning("Email claim not found in Azure AD principal")
+                except Exception as e:
+                    logger.error(f"Error decoding Azure AD principal: {e}")
+
+            # Fallback to Django user email if Azure AD email not found
+            if not email:
+                email = request.user.email.lower().strip()
+                logger.info(f"Fallback to Django user email: {email}")
+
+            # Department mapping (can move to settings.py)
             department_map = {
-                'elias@DzignscapeProfessionals.onmicrosoft.com': 'construction',
-                'jakir@DzignscapeProfessionals.onmicrosoft.com': 'sales',
+                'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+                'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
                 # Add more mappings here
             }
 
-            # Map department if matched
+            # Assign department if mapped
             mapped_department = department_map.get(email)
             if mapped_department:
                 if profile.department != mapped_department:
@@ -37,6 +61,7 @@ class EnsureProfileAndDepartmentMiddleware:
                 logger.warning(f"Unmapped email: {email} — no department assigned")
 
         return self.get_response(request)
+
 
 
 
