@@ -10,14 +10,15 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  {# Department-specific stylesheet (semantic path) #}
-  {% if request.user.is_authenticated and request.user.profile.department %}
-    <link rel="stylesheet" href="{% static 'css/'|add:request.user.profile.department|lower|add:'/'|add:request.user.profile.department|lower|add:'.css' %}">
+  {# Department-specific stylesheet #}
+  {% if request.user.is_authenticated %}
+    {% with request.user.profile.department|default:"default"|lower as dept %}
+      <link rel="stylesheet" href="{% static 'css/'|add:dept|add:'/'|add:dept|add:'.css' %}">
+    {% endwith %}
   {% else %}
     <link rel="stylesheet" href="{% static 'css/default.css' %}">
   {% endif %}
 </head>
-
 
   <style>
     body {
@@ -108,74 +109,70 @@
 <body>
 
 
-<div class="sidebar {% if request.user.is_authenticated %}{{ request.user.profile.department|default:"no-department"|lower }}{% endif %}">
-  <div class="sidebar-header">ERP Navigation</div>
-  <ul class="sidebar-menu">
+{% if request.user.is_authenticated %}
+  {% with request.user.email as email %}
+    
+    <!-- DEBUG: {{ email }} -->
 
-    {% if request.user.is_authenticated %}
-      {% with request.user.profile as profile %}
+    {# Always show Home #}
+    <li class="nav-item">
+      <a href="{% url 'home' %}">
+        <span><i class="fas fa-home"></i> Home</span>
+      </a>
+    </li>
 
-        {# Home: visible to non-construction/sales OR superusers #}
-        {% if profile.department != 'construction' and profile.department != 'sales' %}
-          <li class="nav-item">
-            <a href="{% url 'home' %}">
-              <span><i class="fas fa-home"></i> Home</span>
-            </a>
-          </li>
-        {% elif request.user.is_superuser %}
-          <li class="nav-item">
-            <a href="{% url 'home' %}">
-              <span><i class="fas fa-home"></i> Home</span>
-            </a>
-          </li>
-        {% endif %}
-
-        {# Construction Section #}
-        {% if profile.department == 'construction' or request.user.is_superuser %}
-          <li class="dropdown">
-            <a class="dropdown-toggle">
-              <span><i class="fas fa-hard-hat"></i> Construction</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-              <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
-            </ul>
-          </li>
-        {% endif %}
-
-        {# Sales Section #}
-        {% if profile.department == 'sales' or request.user.is_superuser %}
-          <li class="dropdown">
-            <a class="dropdown-toggle">
-              <span><i class="fas fa-chart-line"></i> Sales</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
-            </ul>
-          </li>
-        {% endif %}
-
-        {# Fallback: No department assigned #}
-        {% if not profile.department %}
-          <li class="nav-item text-muted">
-            <span><i class="fas fa-exclamation-circle"></i> No department assigned</span>
-          </li>
-        {% endif %}
-
-      {% endwith %}
-    {% else %}
-      {# Home for anonymous users #}
-      <li class="nav-item">
-        <a href="{% url 'home' %}">
-          <span><i class="fas fa-home"></i> Home</span>
+    {# Construction Section for Elias #}
+    {% if email == 'elias@dzignscapeprofessionals.onmicrosoft.com' %}
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span><i class="fas fa-hard-hat"></i> Construction</span>
+          <i class="fa fa-chevron-down toggle-icon"></i>
         </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+          <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+        </ul>
       </li>
     {% endif %}
 
-  </ul>
-</div>
+    {# Sales Section for Jakir #}
+    {% if email == 'jakir@dzignscapeprofessionals.onmicrosoft.com' %}
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span><i class="fas fa-chart-line"></i> Sales</span>
+          <i class="fa fa-chevron-down toggle-icon"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
+        </ul>
+      </li>
+    {% endif %}
+
+    {# Superuser override: show all sections #}
+    {% if request.user.is_superuser %}
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span><i class="fas fa-hard-hat"></i> Construction (Admin)</span>
+          <i class="fa fa-chevron-down toggle-icon"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+          <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span><i class="fas fa-chart-line"></i> Sales (Admin)</span>
+          <i class="fa fa-chevron-down toggle-icon"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
+        </ul>
+      </li>
+    {% endif %}
+
+  {% endwith %}
+{% endif %}
 
 
   <div class="main-content">
