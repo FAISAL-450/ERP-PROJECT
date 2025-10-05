@@ -112,7 +112,7 @@
 {% if request.user.is_authenticated %}
   {% with request.user.email as email %}
     
-    <!-- DEBUG: {{ email }} -->
+    <!-- DEBUG: {{ email }} → {{ request.user.profile.department }} -->
 
     {# Always show Home #}
     <li class="nav-item">
