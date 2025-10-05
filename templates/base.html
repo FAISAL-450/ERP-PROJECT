@@ -111,9 +111,6 @@
 
 <ul class="sidebar-menu">
 
-  <!-- Live Debug Line -->
-  <p style="color:red;">AUTH: {{ request.user.is_authenticated }} → {{ request.user.email }} → {{ request.user.profile.department }}</p>
-
   {% if request.user.is_authenticated %}
     {% with request.user.email as email %}
 
@@ -176,18 +173,17 @@
 
     {% endwith %}
   {% else %}
-    {# Anonymous fallback #}
+    {# Anonymous fallback removed as requested #}
     <li class="nav-item">
       <a href="{% url 'home' %}">
         <span><i class="fas fa-home"></i> Home</span>
       </a>
     </li>
-    <li class="nav-item text-muted">
-      <span><i class="fas fa-lock"></i> Please log in to access department features</span>
-    </li>
   {% endif %}
 
 </ul>
+
+
 
 
   <div class="main-content">

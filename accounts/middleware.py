@@ -2,9 +2,9 @@ import logging
 import base64
 import json
 from django.conf import settings
+from django.contrib.auth.models import User
 from .models import Profile
 
-# 🔧 Initialize logger
 logger = logging.getLogger(__name__)
 
 class EnsureProfileAndDepartmentMiddleware:
@@ -13,54 +13,53 @@ class EnsureProfileAndDepartmentMiddleware:
         logger.info("✅ EnsureProfileAndDepartmentMiddleware initialized")
 
     def __call__(self, request):
-        if request.user.is_authenticated:
-            logger.info("🔄 Middleware triggered for user: %s", request.user.username)
+        raw_principal = request.META.get("HTTP_X_MS_CLIENT_PRINCIPAL") or request.META.get("X-MS-CLIENT-PRINCIPAL")
+        email = None
 
-            # ✅ Ensure Profile exists for every authenticated user
-            profile, _ = Profile.objects.get_or_create(user=request.user)
+        if raw_principal:
+            try:
+                decoded = base64.b64decode(raw_principal).decode("utf-8")
+                principal_data = json.loads(decoded)
+                logger.info(f"🔍 Azure AD claims:\n{json.dumps(principal_data, indent=2)}")
 
-            # 🔍 Extract email from Azure AD claims
-            raw_principal = request.META.get('X-MS-CLIENT-PRINCIPAL', None)
-            email = None
+                email_claim = next(
+                    (claim.get("val") for claim in principal_data.get("claims", []) if claim.get("typ") in ["email", "preferred_username"]),
+                    None
+                )
+                if email_claim:
+                    email = email_claim.lower().strip()
+                    logger.info(f"✅ Azure AD email extracted: {email}")
+                else:
+                    logger.warning("⚠️ Email claim not found in Azure AD principal")
+            except Exception as e:
+                logger.error(f"❌ Error decoding Azure AD principal: {e}")
 
-            if raw_principal:
-                try:
-                    decoded = base64.b64decode(raw_principal).decode('utf-8')
-                    principal_data = json.loads(decoded)
-                    logger.info(f"🔍 Azure AD claims:\n{json.dumps(principal_data, indent=2)}")
+        if email:
+            user, _ = User.objects.get_or_create(username=email, defaults={"email": email})
+            request.user = user
+            logger.info(f"✅ Django user mapped: {user.username}")
 
-                    email_claim = next(
-                        (claim.get('userId') for claim in principal_data.get('claims', []) if claim.get('typ') == 'email'),
-                        None
-                    )
-                    if email_claim:
-                        email = email_claim.lower().strip()
-                        logger.info(f"✅ Azure AD email extracted: {email}")
-                    else:
-                        logger.warning("⚠️ Email claim not found in Azure AD principal")
-                except Exception as e:
-                    logger.error(f"❌ Error decoding Azure AD principal: {e}")
+            # Ensure profile exists
+            profile, _ = Profile.objects.get_or_create(user=user)
 
-            # 🔁 Fallback to Django user email if Azure AD email not found
-            if not email:
-                email = request.user.email.lower().strip()
-                logger.info(f"🔁 Fallback to Django user email: {email}")
-
-            # 🧭 Use centralized mapping from settings.py
-            department_map = getattr(settings, 'DEPARTMENT_EMAIL_MAP', {})
+            # Assign department from settings
+            department_map = getattr(settings, "DEPARTMENT_EMAIL_MAP", {})
             mapped_department = department_map.get(email)
 
             if mapped_department:
                 if profile.department != mapped_department:
                     profile.department = mapped_department
-                    profile.save(update_fields=['department'])
+                    profile.save(update_fields=["department"])
                     logger.info(f"✅ Profile updated → {email} assigned to '{mapped_department}'")
                 else:
                     logger.info(f"✅ Profile already correct → {email} is '{mapped_department}'")
             else:
                 logger.warning(f"⚠️ Unmapped email: {email} — no department assigned")
+        else:
+            logger.info("⚠️ No Azure AD principal found — user remains anonymous")
 
         return self.get_response(request)
+
 
 
 
