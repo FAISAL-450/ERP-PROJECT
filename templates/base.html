@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}ERP System{% endblock %}</title>
 
-  {# Global styles #}
+  <!-- Global styles -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  {# Department-specific stylesheet #}
+  <!-- Department-specific stylesheet -->
   {% if request.user.is_authenticated %}
     {% with request.user.profile.department|default:"default"|lower as dept %}
       <link rel="stylesheet" href="{% static 'css/'|add:dept|add:'/'|add:dept|add:'.css' %}">
@@ -18,7 +18,6 @@
   {% else %}
     <link rel="stylesheet" href="{% static 'css/default.css' %}">
   {% endif %}
-</head>
 
   <style>
     body {
@@ -28,9 +27,8 @@
       display: flex;
     }
 
-    /* Whole-Sidebar-(Sidebar-Header+Sidebar-Menu) */
     .sidebar {
-      width: 220px;   /* Whole Sidebar-Width */
+      width: 220px;
       background-color: #3c4b64;
       color: white;
       height: 100vh;
@@ -39,27 +37,22 @@
       left: 0;
       overflow-y: auto;
       transition: width 0.3s ease;
-      
     }
 
-    /* Sidebar-Header */
     .sidebar-header {
       padding: 20px;
       font-size: 20px;
       font-weight: bold;
       text-align: left;
-      background-color: #3c4b64;   /* Color-Same as-Sidebar-Background Color */
-      margin-top:25px      /* Sidebar-Header-Up & Down */
-
+      background-color: #3c4b64;
+      margin-top: 25px;
     }
 
-    /* Sidebar-Menu-(Bellow-Header) */
     .sidebar-menu {
       list-style: none;
       padding: 0;
       margin: 0;
-      margin-top:-10px    /* Sidebar-Menu-(Bellow-Header-Up & Down) */
-
+      margin-top: -10px;
     }
 
     .sidebar-menu li {
@@ -76,13 +69,13 @@
     }
 
     .sidebar-menu a:hover {
-      background-color: #3c4b64;      /* Color-Same as-Sidebar-Background Color */
+      background-color: #3c4b64;
       border-radius: 4px;
     }
 
     .dropdown-menu {
       list-style: none;
-      padding-left: 20px;    /* Drop-down-Move-Left/Right */
+      padding-left: 20px;
       display: none;
       transition: all 0.3s ease;
     }
@@ -108,83 +101,73 @@
 </head>
 <body>
 
-
-<ul class="sidebar-menu">
-
   {% if request.user.is_authenticated %}
-    {% with request.user.email as email %}
+    <div class="sidebar">
+      <div class="sidebar-header">RCC ERP</div>
+      <ul class="sidebar-menu">
+        {% with request.user.email as email %}
 
-      {# Always show Home #}
-      <li class="nav-item">
-        <a href="{% url 'home' %}">
-          <span><i class="fas fa-home"></i> Home</span>
-        </a>
-      </li>
+          <!-- Always show Home -->
+          <li class="nav-item">
+            <a href="{% url 'home' %}">
+              <span><i class="fas fa-home"></i> Home</span>
+            </a>
+          </li>
 
-      {# Construction Section for Elias #}
-      {% if email == 'elias@dzignscapeprofessionals.onmicrosoft.com' %}
-        <li class="dropdown">
-          <a class="dropdown-toggle">
-            <span><i class="fas fa-hard-hat"></i> Construction</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-            <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
-          </ul>
-        </li>
-      {% endif %}
+          <!-- Construction Section for Elias -->
+          {% if email == 'elias@dzignscapeprofessionals.onmicrosoft.com' %}
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-hard-hat"></i> Construction</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+                <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-      {# Sales Section for Jakir #}
-      {% if email == 'jakir@dzignscapeprofessionals.onmicrosoft.com' %}
-        <li class="dropdown">
-          <a class="dropdown-toggle">
-            <span><i class="fas fa-chart-line"></i> Sales</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
-          </ul>
-        </li>
-      {% endif %}
+          <!-- Sales Section for Jakir -->
+          {% if email == 'jakir@dzignscapeprofessionals.onmicrosoft.com' %}
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-chart-line"></i> Sales</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-      {# Superuser override: show all sections #}
-      {% if request.user.is_superuser %}
-        <li class="dropdown">
-          <a class="dropdown-toggle">
-            <span><i class="fas fa-hard-hat"></i> Construction (Admin)</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-            <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle">
-            <span><i class="fas fa-chart-line"></i> Sales (Admin)</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
-          </ul>
-        </li>
-      {% endif %}
+          <!-- Superuser override -->
+          {% if request.user.is_superuser %}
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-hard-hat"></i> Construction (Admin)</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+                <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-chart-line"></i> Sales (Admin)</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-    {% endwith %}
-  {% else %}
-    {# Anonymous fallback removed as requested #}
-    <li class="nav-item">
-      <a href="{% url 'home' %}">
-        <span><i class="fas fa-home"></i> Home</span>
-      </a>
-    </li>
+        {% endwith %}
+      </ul>
+    </div>
   {% endif %}
-
-</ul>
-
-
-
 
   <div class="main-content">
     {% block content %}{% endblock %}
@@ -201,3 +184,5 @@
 
 </body>
 </html>
+
+
