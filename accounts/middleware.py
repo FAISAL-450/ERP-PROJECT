@@ -4,15 +4,18 @@ import json
 from django.conf import settings
 from .models import Profile
 
+# 🔧 Initialize logger
 logger = logging.getLogger(__name__)
 
 class EnsureProfileAndDepartmentMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        logger.info("EnsureProfileAndDepartmentMiddleware initialized")
+        logger.info("✅ EnsureProfileAndDepartmentMiddleware initialized")
 
     def __call__(self, request):
         if request.user.is_authenticated:
+            logger.info("🔄 Middleware triggered for user: %s", request.user.username)
+
             # ✅ Ensure Profile exists for every authenticated user
             profile, _ = Profile.objects.get_or_create(user=request.user)
 
@@ -24,8 +27,10 @@ class EnsureProfileAndDepartmentMiddleware:
                 try:
                     decoded = base64.b64decode(raw_principal).decode('utf-8')
                     principal_data = json.loads(decoded)
+                    logger.info(f"🔍 Azure AD claims:\n{json.dumps(principal_data, indent=2)}")
+
                     email_claim = next(
-                        (claim['userId'] for claim in principal_data['claims'] if claim['typ'] == 'email'),
+                        (claim.get('userId') for claim in principal_data.get('claims', []) if claim.get('typ') == 'email'),
                         None
                     )
                     if email_claim:
@@ -48,7 +53,7 @@ class EnsureProfileAndDepartmentMiddleware:
             if mapped_department:
                 if profile.department != mapped_department:
                     profile.department = mapped_department
-                    profile.save()
+                    profile.save(update_fields=['department'])
                     logger.info(f"✅ Profile updated → {email} assigned to '{mapped_department}'")
                 else:
                     logger.info(f"✅ Profile already correct → {email} is '{mapped_department}'")
@@ -56,6 +61,9 @@ class EnsureProfileAndDepartmentMiddleware:
                 logger.warning(f"⚠️ Unmapped email: {email} — no department assigned")
 
         return self.get_response(request)
+
+
+
 
 
 

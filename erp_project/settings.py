@@ -63,12 +63,11 @@ MIDDLEWARE = [
 DEPARTMENT_EMAIL_MAP = {
     'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
     'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
-   
 }
+
 
 # 🔐 Azure AD Login Redirect
 LOGIN_URL = '/.auth/login/aad'
-
 
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'

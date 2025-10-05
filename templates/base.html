@@ -108,13 +108,14 @@
 <body>
 
 
-
- <div class="sidebar {% if request.user.is_authenticated %}{{ request.user.profile.department|default:"no-department"|lower }}{% endif %}">
+<div class="sidebar {% if request.user.is_authenticated %}{{ request.user.profile.department|default:"no-department"|lower }}{% endif %}">
   <div class="sidebar-header">ERP Navigation</div>
   <ul class="sidebar-menu">
 
     {% if request.user.is_authenticated %}
       {% with request.user.profile as profile %}
+
+        <!-- DEBUG: {{ request.user.email }} → {{ profile.department }} -->
 
         {# Home: visible to non-construction/sales OR superusers #}
         {% if profile.department != 'construction' and profile.department != 'sales' %}
@@ -177,7 +178,6 @@
 
   </ul>
 </div>
-
 
 
   <div class="main-content">
