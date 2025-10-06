@@ -17,14 +17,25 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # 🌍 Hosts and CSRF
 try:
-    ALLOWED_HOSTS = json.loads(os.environ.get('DJANGO_ALLOWED_HOSTS', '["localhost", "127.0.0.1"]'))
+    ALLOWED_HOSTS = json.loads(os.environ.get(
+        'DJANGO_ALLOWED_HOSTS',
+        '["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]'
+    ))
 except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]
 
 try:
-    CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get('CSRF_TRUSTED_ORIGINS', '["http://localhost", "http://127.0.0.1"]'))
+    CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
+        'CSRF_TRUSTED_ORIGINS',
+        '["http://localhost", "http://127.0.0.1", "https://erp-ac-app.azurewebsites.net"]'
+    ))
 except (json.JSONDecodeError, TypeError):
-    CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
+    CSRF_TRUSTED_ORIGINS = [
+        "http://localhost",
+        "http://127.0.0.1",
+        "https://erp-ac-app.azurewebsites.net"
+    ]
+
 
 # 📦 Installed Apps
 INSTALLED_APPS = [
