@@ -30,11 +30,19 @@ try:
         '["http://localhost", "http://127.0.0.1", "https://erp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
+    
     CSRF_TRUSTED_ORIGINS = [
-        "http://localhost",
-        "http://127.0.0.1",
-        "https://erp-ac-app.azurewebsites.net"
-    ]
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://erp-ac-app.azurewebsites.net",
+    "http://erp-ac-app.azurewebsites.net"
+]
+
+
+# 🔐 CSRF and Cookie Security for Azure
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False  # Only set to True if you don't need JS access
 
 
 # 📦 Installed Apps
