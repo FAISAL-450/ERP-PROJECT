@@ -71,16 +71,20 @@
   </form>
 </section>
 
+
+
   <!-- 📋 Project List Section -->
 <section class="table-section">
   <header class="table-header">
     <h2><i class="fas fa-list"></i> PROJECT LIST</h2>
   </header>
 
+
+
   <table>
     <thead>
       <tr>
-        <th>ID</th>
+        <th>#</th> <!-- Changed from ID to sequential number -->
         <th>Name of Project</th>
         <th>Detailed Project Address</th>
         <th>Name of Contact Person</th>
@@ -89,6 +93,9 @@
       </tr>
     </thead>
     <tbody>
+
+
+      
       {% for project in projects %}
         <tr>
           <td>{{ project.id }}</td>
@@ -113,6 +120,9 @@
       {% endfor %}
     </tbody>
   </table>
+
+
+
 
   <!-- 📋 Paginator Section -->
   {% if projects.paginator.num_pages > 1 %}
