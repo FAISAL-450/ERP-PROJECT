@@ -36,10 +36,15 @@ except (json.JSONDecodeError, TypeError):
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
-SECURE_SSL_REDIRECT = not DEBUG
+
+# ⚠️ Prevent redirect loops: Let Azure handle HTTPS
+SECURE_SSL_REDIRECT = False
+
+# ✅ Optional: Enable HSTS headers only in production
 SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
 
 # 📦 Installed Apps
 INSTALLED_APPS = [
