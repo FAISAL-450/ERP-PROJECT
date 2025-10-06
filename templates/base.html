@@ -107,13 +107,14 @@
 </head>
 <body>
 
+
   {% if request.user.is_authenticated %}
   <div class="sidebar">
     <div class="sidebar-header">RCC ERP</div>
     <ul class="sidebar-menu">
       {% with request.user.email as email %}
 
-        <!-- Construction Section for Elias -->
+        <!-- Elias: Only Construction -->
         {% if email == 'elias@dzignscapeprofessionals.onmicrosoft.com' %}
           <li class="dropdown">
             <a class="dropdown-toggle">
@@ -125,10 +126,9 @@
               <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
             </ul>
           </li>
-        {% endif %}
 
-        <!-- Sales Section for Jakir -->
-        {% if email == 'jakir@dzignscapeprofessionals.onmicrosoft.com' %}
+        <!-- Jakir: Only Sales -->
+        {% elif email == 'jakir@dzignscapeprofessionals.onmicrosoft.com' %}
           <li class="dropdown">
             <a class="dropdown-toggle">
               <span><i class="fas fa-chart-line"></i> Sales</span>
@@ -138,10 +138,14 @@
               <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
             </ul>
           </li>
-        {% endif %}
 
-        <!-- Superuser override -->
-        {% if request.user.is_superuser %}
+        <!-- Superuser: Full Access -->
+        {% elif request.user.is_superuser %}
+          <li class="nav-item">
+            <a href="{% url 'home' %}">
+              <span><i class="fas fa-home"></i> Home</span>
+            </a>
+          </li>
           <li class="dropdown">
             <a class="dropdown-toggle">
               <span><i class="fas fa-hard-hat"></i> Construction (Admin)</span>
@@ -161,8 +165,8 @@
               <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
             </ul>
           </li>
-        {% endif %}
 
+        {% endif %}
       {% endwith %}
     </ul>
   </div>
