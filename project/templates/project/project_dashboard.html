@@ -16,51 +16,53 @@
     {% endfor %}
   {% endif %}
 
+
+  
   <!-- 📝 Grid-Based Project Form Section -->
-  <section class="form-section">
-    <header class="form" onclick="toggleForm()">
-  <h2><i class="fas fa-tasks"></i> PROJECT FORM <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
-</header>
+<section class="form-section">
+  <header class="form" onclick="toggleForm()">
+    <h2><i class="fas fa-tasks"></i> PROJECT FORM <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
+  </header>
 
-    <div id="formContent" class="form-content" style="display: block;">
+  <div id="formContent" class="form-content" style="display: block;">
+    <form method="post" action="{% url 'project_create_or_update' project.id %}" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-
-      <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-
-        <!-- Grid Layout -->
-        <div class="form-grid">
-          <div class="form-cell">
-            {{ form.name_of_project.label_tag }}
-            {{ form.name_of_project }}
-          </div>
-          <div class="form-cell">
-            {{ form.project_address.label_tag }}
-            {{ form.project_address }}
-          </div>
-          <div class="form-cell">
-            {{ form.contact_person_name.label_tag }}
-            {{ form.contact_person_name }}
-          </div>
-          <div class="form-cell">
-            {{ form.contact_person_number.label_tag }}
-            {{ form.contact_person_number }}
-          </div>
+      <!-- Grid Layout -->
+      <div class="form-grid">
+        <div class="form-cell">
+          {{ form.name_of_project.label_tag }}
+          {{ form.name_of_project }}
         </div>
-
-        <!-- Form Actions -->
-        <div class="form-actions">
-          <button type="submit" class="btn green">
-            {% if mode == 'edit' %}Update{% else %}Save{% endif %}
-          </button>
-          {% if mode != 'list' %}
-            <a href="{% url 'project_dashboard' %}" class="btn gray">Cancel</a>
-          {% endif %}
+        <div class="form-cell">
+          {{ form.project_address.label_tag }}
+          {{ form.project_address }}
         </div>
-      </form>
-    </div>
-  </section>
+        <div class="form-cell">
+          {{ form.contact_person_name.label_tag }}
+          {{ form.contact_person_name }}
+        </div>
+        <div class="form-cell">
+          {{ form.contact_person_number.label_tag }}
+          {{ form.contact_person_number }}
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="submit" class="btn green">
+          {% if mode == 'edit' %}Update{% else %}Save{% endif %}
+        </button>
+        {% if mode != 'list' %}
+          <a href="{% url 'project_dashboard' %}" class="btn gray">Cancel</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</section>
+
+
 
  <!-- 🔍 Filter/Search Section -->
 <section class="filter-section">
