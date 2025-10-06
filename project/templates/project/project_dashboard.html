@@ -79,12 +79,10 @@
     <h2><i class="fas fa-list"></i> PROJECT LIST</h2>
   </header>
 
-
-
   <table>
     <thead>
       <tr>
-        <th>#</th> <!-- Changed from ID to sequential number -->
+        <th>#</th> <!-- Sequential number -->
         <th>Name of Project</th>
         <th>Detailed Project Address</th>
         <th>Name of Contact Person</th>
@@ -93,21 +91,18 @@
       </tr>
     </thead>
     <tbody>
-
-
-      
       {% for project in projects %}
         <tr>
-          <td>{{ project.id }}</td>
+          <td>{{ forloop.counter }}</td> <!-- Sequential number -->
           <td>{{ project.name_of_project }}</td>
           <td>{{ project.project_address }}</td>
           <td>{{ project.contact_person_name }}</td>
           <td>{{ project.contact_person_number }}</td>
           <td>
-            <a href="{% url 'edit_project' project.id %}?q={{ query }}" class="btn yellow action-btn">
+            <a href="{% url 'edit_project' project.id %}" class="btn yellow action-btn">
               <i class="fas fa-edit"></i> Edit
             </a>
-            <form method="post" action="{% url 'project_delete' project.id %}?q={{ query }}" style="display:inline;">
+            <form method="post" action="{% url 'project_delete' project.id %}" style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this project?');">
                 <i class="fas fa-trash-alt"></i> Delete
@@ -120,7 +115,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+</section>
 
 
 
