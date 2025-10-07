@@ -19,11 +19,7 @@ jobs:
       DATABASE_USER: ${{ secrets.DATABASE_USER }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-      DJANGO_DEBUG: 'False'
-      DJANGO_ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
-      CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
-
+      
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
