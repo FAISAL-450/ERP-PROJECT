@@ -111,10 +111,10 @@ USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
+        'NAME': os.getenv('AZURE_POSTGRESQL_NAME'),
+        'USER': os.getenv('AZURE_POSTGRESQL_USER'),
+        'PASSWORD': os.getenv('AZURE_POSTGRESQL_PASSWORD'),
+        'HOST': os.getenv('AZURE_POSTGRESQL_HOST'),
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
