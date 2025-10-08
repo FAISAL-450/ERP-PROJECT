@@ -10,24 +10,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF
+# 🌍 Hosts and CSRF for Azure
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
         'DJANGO_ALLOWED_HOSTS',
-        '["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]'
+        '["erp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]
+    ALLOWED_HOSTS = ["erp-ac-app.azurewebsites.net"]
 
 try:
     CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        '["http://localhost", "http://127.0.0.1", "https://erp-ac-app.azurewebsites.net", "http://erp-ac-app.azurewebsites.net"]'
+        '["https://erp-ac-app.azurewebsites.net", "http://erp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
     CSRF_TRUSTED_ORIGINS = [
-        "http://localhost",
-        "http://127.0.0.1",
         "https://erp-ac-app.azurewebsites.net",
         "http://erp-ac-app.azurewebsites.net"
     ]
@@ -106,6 +104,8 @@ TEMPLATES = [
         },
     },
 ]
+
+USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
 
 # 🗄️ Database
 DATABASES = {
