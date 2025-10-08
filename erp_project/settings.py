@@ -111,10 +111,10 @@ USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'erp-project-db',
-        'USER': 'belal2026@erpn-postgres-db',  # ✅ must include server name
-        'PASSWORD': 'SecureDb#2026!',
-        'HOST': 'erpn-postgres-db.postgres.database.azure.com',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
