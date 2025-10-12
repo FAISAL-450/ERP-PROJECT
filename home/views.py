@@ -22,6 +22,7 @@ def home_view(request):
 
     monthly_trend = (
         Project.objects
+        .filter(created_at__isnull=False)  # Prevent TruncMonth crash
         .annotate(month=TruncMonth('created_at'))
         .values('month')
         .annotate(count=Count('id'))
