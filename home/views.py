@@ -1,5 +1,7 @@
+# home/views.py
+
 from django.shortcuts import render
-from project.models import Project  # Importing from the project app
+from project.models import Project  # Ensure this matches your actual app name
 
 def home_view(request):
     total_projects = Project.objects.count()
@@ -11,6 +13,7 @@ def home_view(request):
     }
 
     return render(request, "home/home.html", context)
+
 
 
 
