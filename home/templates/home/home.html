@@ -1,47 +1,35 @@
-{% extends 'base.html' %}
-{% block content %}
+<!-- home/templates/home/home.html -->
 
-<h1 class="text-2xl font-bold mb-4">📊 RCC ERP Project Summary</h1>
-<p class="mb-6">Welcome to the RCC ERP System. Below is a summary of your construction projects.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RCC ERP Project Summary</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <section class="summary-section">
+    <h1>🏗️ RCC ERP Project Summary</h1>
+    <p>Welcome to the RCC ERP System. Below is a summary of your construction projects.</p>
 
-<!-- 🔢 KPI Cards -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-  <div class="bg-white p-4 rounded shadow">
-    <h2 class="text-sm text-gray-500">Total Projects</h2>
-    <p class="text-3xl font-bold text-blue-600">{{ total_projects }}</p>
-  </div>
-</div>
+    <div class="summary-box">
+      <h2>Total Projects: {{ total_projects }}</h2>
+    </div>
 
-<!-- 📍 Region Summary -->
-<section class="bg-white p-6 rounded shadow mb-6">
-  <h3 class="text-lg font-semibold mb-4">Projects by Region</h3>
-  <ul class="space-y-1">
-    {% for region in region_summary %}
-      <li>{{ region.project_address }} — <strong>{{ region.count }}</strong></li>
-    {% endfor %}
-  </ul>
-</section>
+    <div class="summary-box">
+      <h3>📋 Project Names:</h3>
+      <ul>
+        {% for name in project_names %}
+          <li>{{ name }}</li>
+        {% empty %}
+          <li>No projects found.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+</body>
+</html>
 
-<!-- 👤 Top Contact Persons -->
-<section class="bg-white p-6 rounded shadow mb-6">
-  <h3 class="text-lg font-semibold mb-4">Top Contact Persons</h3>
-  <ul class="space-y-1">
-    {% for contact in top_contacts %}
-      <li>{{ contact.contact_person_name }} — <strong>{{ contact.count }}</strong></li>
-    {% endfor %}
-  </ul>
-</section>
 
-<!-- 📅 Monthly Trend -->
-<section class="bg-white p-6 rounded shadow">
-  <h3 class="text-lg font-semibold mb-4">Monthly Project Creation</h3>
-  <ul class="space-y-1">
-    {% for month in monthly_trend %}
-      <li>{{ month.month }} — <strong>{{ month.count }}</strong></li>
-    {% endfor %}
-  </ul>
-</section>
-
-{% endblock %}
 
 
