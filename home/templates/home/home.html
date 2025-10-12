@@ -1,16 +1,9 @@
-
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>RCC ERP Project Summary</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
   <section class="summary-section">
     <h1>🏗️ RCC ERP Project Summary</h1>
     <p>Welcome to the RCC ERP System. Below is a summary of your construction projects.</p>
+    <p>Select a department from the sidebar to begin.</p>
 
     <div class="summary-box">
       <h2>Total Projects: {{ total_projects }}</h2>
@@ -29,8 +22,9 @@
       {% endif %}
     </div>
   </section>
-</body>
-</html>
+{% endblock %}
+
+
 
 
 
