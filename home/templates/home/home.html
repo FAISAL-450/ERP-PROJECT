@@ -12,6 +12,12 @@
       color: #333;
     }
 
+    .summary-section p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -60,7 +66,9 @@
   </style>
 
   <section class="summary-section">
-    <h1>ERP-Dashboard</h1>
+    <h1>🏗️ RCC ERP Dashboard</h1>
+    <p>Welcome to the RCC ERP System. Below is a summary of your construction projects and contractors.</p>
+    <p>Select a department from the sidebar to begin.</p>
 
     <div class="card-grid">
       <!-- 📦 Total Projects Card -->
@@ -82,6 +90,27 @@
           <p>No projects found.</p>
         {% endif %}
       </div>
+
+      <!-- 👷 Total Contractors Card -->
+      <div class="card">
+        <h2>Total Contractors</h2>
+        <p class="card-value">{{ total_contractors }}</p>
+      </div>
+
+      <!-- 🧾 Contractor Names Card -->
+      <div class="card">
+        <h3>Contractor Names</h3>
+        {% if contractor_names %}
+          <ul class="card-list">
+            {% for name in contractor_names %}
+              <li>{{ name }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No contractors found.</p>
+        {% endif %}
+      </div>
     </div>
   </section>
 {% endblock %}
+
