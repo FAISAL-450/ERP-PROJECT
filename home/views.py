@@ -7,7 +7,7 @@ from customer.models import Customer
 @login_required
 def home_view(request):
     # Safely get user email or fallback to username
-    user_email = getattr(request.user, "email", request.user.username).lower()
+    user_email = getattr(request.user, "email", request.user.username or "").lower()
 
     # 📦 Project Summary
     total_projects = Project.objects.count()
@@ -32,6 +32,8 @@ def home_view(request):
     }
 
     return render(request, "home/home.html", context)
+
+
 
 
 
