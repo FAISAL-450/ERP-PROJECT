@@ -54,7 +54,7 @@
 <section class="summary-section">
   <h1>ERP-Dashboard</h1>
 
-  {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+  {% if user_email in ["elias@dzignscapeprofessionals.onmicrosoft.com", "admin@dzignscapeprofessionals.onmicrosoft.com"] %}
     <!-- 📦 Project Grid -->
     <div class="card-grid">
       <div class="card">
@@ -74,9 +74,7 @@
         {% endif %}
       </div>
     </div>
-  {% endif %}
 
-  {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
     <!-- 👷 Contractor Grid -->
     <div class="card-grid">
       <div class="card">
@@ -98,7 +96,7 @@
     </div>
   {% endif %}
 
-  {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+  {% if user_email in ["jakir@dzignscapeprofessionals.onmicrosoft.com", "admin@dzignscapeprofessionals.onmicrosoft.com"] %}
     <!-- 🧑‍💼 Customer Grid -->
     <div class="card-grid">
       <div class="card">
