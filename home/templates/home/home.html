@@ -54,12 +54,15 @@
 <section class="summary-section">
   <h1>ERP-Dashboard</h1>
 
+  {# Optional debug line for troubleshooting #}
+  {# <p><strong>User Email:</strong> {{ user_email }}</p> #}
+
   {% if user_email in ["elias@dzignscapeprofessionals.onmicrosoft.com", "admin@dzignscapeprofessionals.onmicrosoft.com"] %}
     <!-- 📦 Project Grid -->
     <div class="card-grid">
       <div class="card">
         <h2>Total Projects</h2>
-        <p class="card-value">{{ total_projects }}</p>
+        <p class="card-value">{{ total_projects|default:"0" }}</p>
       </div>
       <div class="card">
         <h3>Project Names</h3>
@@ -79,7 +82,7 @@
     <div class="card-grid">
       <div class="card">
         <h2>Total Contractors</h2>
-        <p class="card-value">{{ total_contractors }}</p>
+        <p class="card-value">{{ total_contractors|default:"0" }}</p>
       </div>
       <div class="card">
         <h3>Contractor Names</h3>
@@ -101,7 +104,7 @@
     <div class="card-grid">
       <div class="card">
         <h2>Total Customers</h2>
-        <p class="card-value">{{ total_customers }}</p>
+        <p class="card-value">{{ total_customers|default:"0" }}</p>
       </div>
       <div class="card">
         <h3>Customer Names</h3>
@@ -119,6 +122,8 @@
   {% endif %}
 </section>
 {% endblock %}
+
+
 
 
 
