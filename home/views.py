@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from project.models import Project
 from contractor.models import Contractor
+from customer.models import Customer
 
 @login_required
 def home_view(request):
@@ -16,15 +17,23 @@ def home_view(request):
     total_contractors = Contractor.objects.count()
     contractor_names = Contractor.objects.values_list('contractor_name', flat=True)
 
+    # 🧑‍💼 Customer Summary
+    total_customers = Customer.objects.count()
+    customer_names = Customer.objects.values_list('customer_name', flat=True)
+
     context = {
         "total_projects": total_projects,
         "project_names": project_names,
         "total_contractors": total_contractors,
         "contractor_names": contractor_names,
-        "user_email": user_email,  # passed for direct comparison in template
+        "total_customers": total_customers,
+        "customer_names": customer_names,
+        "user_email": user_email,
     }
 
     return render(request, "home/home.html", context)
+
+
 
 
 

@@ -54,15 +54,13 @@
 <section class="summary-section">
   <h1>ERP-Dashboard</h1>
 
-  <div class="card-grid">
-    {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
-      <!-- 📦 Total Projects Card -->
+  {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+    <!-- 📦 Project Grid -->
+    <div class="card-grid">
       <div class="card">
         <h2>Total Projects</h2>
         <p class="card-value">{{ total_projects }}</p>
       </div>
-
-      <!-- 📋 Project Names Card -->
       <div class="card">
         <h3>Project Names</h3>
         {% if project_names %}
@@ -75,16 +73,16 @@
           <p>No projects found.</p>
         {% endif %}
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
-    {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
-      <!-- 👷 Total Contractors Card -->
+  {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+    <!-- 👷 Contractor Grid -->
+    <div class="card-grid">
       <div class="card">
         <h2>Total Contractors</h2>
         <p class="card-value">{{ total_contractors }}</p>
       </div>
-
-      <!-- 🧾 Contractor Names Card -->
       <div class="card">
         <h3>Contractor Names</h3>
         {% if contractor_names %}
@@ -97,8 +95,30 @@
           <p>No contractors found.</p>
         {% endif %}
       </div>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
+
+  {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+    <!-- 🧑‍💼 Customer Grid -->
+    <div class="card-grid">
+      <div class="card">
+        <h2>Total Customers</h2>
+        <p class="card-value">{{ total_customers }}</p>
+      </div>
+      <div class="card">
+        <h3>Customer Names</h3>
+        {% if customer_names %}
+          <ul class="card-list">
+            {% for name in customer_names %}
+              <li>{{ name }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No customers found.</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
 </section>
 {% endblock %}
 
