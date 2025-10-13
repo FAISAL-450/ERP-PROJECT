@@ -9,7 +9,7 @@ class Customer(models.Model):
         blank=True,
         verbose_name="Project Name"
     )
-    customer_name = models.CharField("Customer Name", max_length=255)
+    customer_name = models.CharField("Customer Name", max_length=255, unique=True)
     customer_email = models.EmailField("Customer Email", unique=True)
     customer_phone = models.CharField("Customer Phone", max_length=15, unique=True)
     customer_address = models.TextField("Customer Address", blank=True, null=True)
