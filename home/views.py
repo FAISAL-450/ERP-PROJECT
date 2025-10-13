@@ -7,41 +7,39 @@ from customer.models import Customer
 @login_required
 def home_view(request):
     # Safely get user email or fallback to username
-    user_email = getattr(request.user, "email", "") or request.user.username or ""
-    user_email = user_email.lower()
+    user_email = (getattr(request.user, "email", "") or request.user.username or "").lower()
 
     # 📦 Project Summary
-    project_qs = Project.objects.values_list('name_of_project', flat=True)
-    project_names = list(project_qs) if project_qs.exists() else []
-    total_projects = len(project_names)
+    project_names = list(Project.objects.values_list("name_of_project", flat=True))
+    project_summary = {
+        "count": len(project_names),
+        "names": project_names,
+    }
 
     # 👷 Contractor Summary
-    contractor_qs = Contractor.objects.values_list('contractor_name', flat=True)
-    contractor_names = list(contractor_qs) if contractor_qs.exists() else []
-    total_contractors = len(contractor_names)
+    contractor_names = list(Contractor.objects.values_list("contractor_name", flat=True))
+    contractor_summary = {
+        "count": len(contractor_names),
+        "names": contractor_names,
+    }
 
     # 🧑‍💼 Customer Summary
-    customer_qs = Customer.objects.values_list('customer_name', flat=True)
-    customer_names = list(customer_qs) if customer_qs.exists() else []
-    total_customers = len(customer_names)
+    customer_names = list(Customer.objects.values_list("customer_name", flat=True))
+    customer_summary = {
+        "count": len(customer_names),
+        "names": customer_names,
+    }
 
     context = {
         "user_email": user_email,
-        "project_summary": {
-            "count": total_projects,
-            "names": project_names,
-        },
-        "contractor_summary": {
-            "count": total_contractors,
-            "names": contractor_names,
-        },
-        "customer_summary": {
-            "count": total_customers,
-            "names": customer_names,
-        },
+        "project_summary": project_summary,
+        "contractor_summary": contractor_summary,
+        "customer_summary": customer_summary,
     }
 
     return render(request, "home/home.html", context)
+
+
 
 
 
