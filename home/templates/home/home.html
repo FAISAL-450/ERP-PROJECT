@@ -1,23 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  .summary-section {
+    padding: 30px;
+    background-color: #f9f9f9;
+  }
+  .summary-section h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+  }
+  .card h2, .card h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  .card-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
+  }
+  .card-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  .card-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 1rem;
+    color: #555;
+  }
+</style>
+
 <section class="summary-section">
   <h1>ERP-Dashboard</h1>
 
-  {# Optional debug line for troubleshooting #}
-  {# <p><strong>User Email:</strong> {{ user_email }}</p> #}
-
-  {% if user_email in ["elias@dzignscapeprofessionals.onmicrosoft.com", "admin@dzignscapeprofessionals.onmicrosoft.com"] %}
-    <!-- 📦 Project Summary -->
-    <div class="card-grid">
+  <div class="card-grid">
+    {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+      <!-- 📦 Total Projects Card -->
       <div class="card">
         <h2>Total Projects</h2>
-        <p class="card-value">{{ project_summary.count|default:"0" }}</p>
+        <p class="card-value">{{ total_projects }}</p>
       </div>
+
+      <!-- 📋 Project Names Card -->
       <div class="card">
         <h3>Project Names</h3>
-        {% if project_summary.names %}
+        {% if project_names %}
           <ul class="card-list">
-            {% for name in project_summary.names %}
+            {% for name in project_names %}
               <li>{{ name }}</li>
             {% endfor %}
           </ul>
@@ -25,19 +75,19 @@
           <p>No projects found.</p>
         {% endif %}
       </div>
-    </div>
 
-    <!-- 👷 Contractor Summary -->
-    <div class="card-grid">
+      <!-- 👷 Total Contractors Card -->
       <div class="card">
         <h2>Total Contractors</h2>
-        <p class="card-value">{{ contractor_summary.count|default:"0" }}</p>
+        <p class="card-value">{{ total_contractors }}</p>
       </div>
+
+      <!-- 🧾 Contractor Names Card -->
       <div class="card">
         <h3>Contractor Names</h3>
-        {% if contractor_summary.names %}
+        {% if contractor_names %}
           <ul class="card-list">
-            {% for name in contractor_summary.names %}
+            {% for name in contractor_names %}
               <li>{{ name }}</li>
             {% endfor %}
           </ul>
@@ -45,21 +95,21 @@
           <p>No contractors found.</p>
         {% endif %}
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
 
-  {% if user_email in ["jakir@dzignscapeprofessionals.onmicrosoft.com", "admin@dzignscapeprofessionals.onmicrosoft.com"] %}
-    <!-- 🧑‍💼 Customer Summary -->
-    <div class="card-grid">
+    {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+      <!-- 🧑‍💼 Total Customers Card -->
       <div class="card">
         <h2>Total Customers</h2>
-        <p class="card-value">{{ customer_summary.count|default:"0" }}</p>
+        <p class="card-value">{{ total_customers }}</p>
       </div>
+
+      <!-- 📇 Customer Names Card -->
       <div class="card">
         <h3>Customer Names</h3>
-        {% if customer_summary.names %}
+        {% if customer_names %}
           <ul class="card-list">
-            {% for name in customer_summary.names %}
+            {% for name in customer_names %}
               <li>{{ name }}</li>
             {% endfor %}
           </ul>
@@ -67,8 +117,10 @@
           <p>No customers found.</p>
         {% endif %}
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 </section>
 {% endblock %}
+
+
 
