@@ -1,10 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from project.models import Project
 from contractor.models import Contractor
 
+@login_required
 def home_view(request):
-    # Normalize user email
-    user_email = request.user.email.lower()
+    # Safely get user email or fallback to username
+    user_email = getattr(request.user, "email", request.user.username).lower()
 
     # 📦 Project Summary
     total_projects = Project.objects.count()
