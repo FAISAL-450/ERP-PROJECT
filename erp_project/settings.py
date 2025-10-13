@@ -82,6 +82,8 @@ DEPARTMENT_EMAIL_MAP = {
     'admin@dzignscapeprofessionals.onmicrosoft.com': 'admin',  # or use 'construction,sales' if multi-access
 }
 
+# Trigger redeploy: minor code change
+
 # 🔐 Azure AD Login Redirect
 LOGIN_URL = '/.auth/login/aad'
 
