@@ -10,11 +10,19 @@
     margin-bottom: 10px;
     color: #333;
   }
+  .dashboard-title {
+    font-size: 1.6rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+  }
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   .card {
     background-color: #fff;
@@ -54,15 +62,14 @@
 <section class="summary-section">
   <h1>ERP-Dashboard</h1>
 
-  <div class="card-grid">
-    {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
-      <!-- 📦 Total Projects Card -->
+  {% if user_email == "elias@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+    <div class="dashboard-title">🏗️ Construction Dashboard</div>
+    <div class="card-grid">
       <div class="card">
         <h2>Total Projects</h2>
         <p class="card-value">{{ total_projects }}</p>
       </div>
 
-      <!-- 📋 Project Names Card -->
       <div class="card">
         <h3>Project Names</h3>
         {% if project_names %}
@@ -76,13 +83,11 @@
         {% endif %}
       </div>
 
-      <!-- 👷 Total Contractors Card -->
       <div class="card">
         <h2>Total Contractors</h2>
         <p class="card-value">{{ total_contractors }}</p>
       </div>
 
-      <!-- 🧾 Contractor Names Card -->
       <div class="card">
         <h3>Contractor Names</h3>
         {% if contractor_names %}
@@ -95,16 +100,17 @@
           <p>No contractors found.</p>
         {% endif %}
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
-    {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
-      <!-- 🧑‍💼 Total Customers Card -->
+  {% if user_email == "jakir@dzignscapeprofessionals.onmicrosoft.com" or user_email == "admin@dzignscapeprofessionals.onmicrosoft.com" %}
+    <div class="dashboard-title">💼 Sales Dashboard</div>
+    <div class="card-grid">
       <div class="card">
         <h2>Total Customers</h2>
         <p class="card-value">{{ total_customers }}</p>
       </div>
 
-      <!-- 📇 Customer Names Card -->
       <div class="card">
         <h3>Customer Names</h3>
         {% if customer_names %}
@@ -117,10 +123,12 @@
           <p>No customers found.</p>
         {% endif %}
       </div>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 </section>
 {% endblock %}
+
+
 
 
 
