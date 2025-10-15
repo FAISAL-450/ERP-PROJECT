@@ -22,7 +22,6 @@ def filter_accounts(query=None):
 def get_paginated_queryset(request, queryset, per_page=10):
     paginator = Paginator(queryset, per_page)
     page_number = request.GET.get("page")
-
     try:
         return paginator.page(page_number)
     except PageNotAnInteger:
@@ -37,11 +36,14 @@ def account_dashboard(request):
     accounts_page = get_paginated_queryset(request, accounts, per_page=10)
 
     form = AccountForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        account = form.save(commit=False)
-        account.save()
-        messages.success(request, "✅ Account created successfully.")
-        return redirect(f"{reverse('account_dashboard')}?q={query}")
+    if request.method == "POST":
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.save()
+            messages.success(request, "✅ Account created successfully.")
+            return redirect(f"{reverse('account_dashboard')}?q={query}")
+        else:
+            messages.error(request, "⚠️ Please correct the errors below.")
 
     return render(request, "account/account_dashboard.html", {
         "accounts": accounts_page,
@@ -56,10 +58,13 @@ def edit_account(request, pk):
     query = request.GET.get("q", "").strip()
 
     form = AccountForm(request.POST or None, instance=account)
-    if form.is_valid():
-        form.save()
-        messages.success(request, "✏️ Account updated successfully.")
-        return redirect(f"{reverse('account_dashboard')}?q={query}")
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✏️ Account updated successfully.")
+            return redirect(f"{reverse('account_dashboard')}?q={query}")
+        else:
+            messages.error(request, "⚠️ Please correct the errors below.")
 
     accounts = filter_accounts(query)
     accounts_page = get_paginated_queryset(request, accounts, per_page=10)
@@ -82,4 +87,9 @@ def account_delete(request, pk):
         account.delete()
         messages.success(request, f"🗑️ Account '{account_name}' deleted successfully.")
         return redirect(f"{reverse('account_dashboard')}?q={query}")
+
+    # Optional: handle GET with a confirmation page
+    return redirect(f"{reverse('account_dashboard')}?q={query}")
+
+
 
