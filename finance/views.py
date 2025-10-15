@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from account.models import Account
+from account.models import Account  # For finance 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 🔁 Reusable Pagination Function
