@@ -45,12 +45,18 @@ def account_dashboard(request):
         else:
             messages.error(request, "⚠️ Please correct the errors below.")
 
-    return render(request, "account/account_dashboard.html", {
-        "accounts": accounts_page,
-        "query": query,
-        "form": form,
-        "mode": "list"
-    })
+    return render(
+        request,
+        "account/account_dashboard.html",
+        {
+            "accounts": accounts_page,
+            "query": query,
+            "form": form,
+            "mode": "list",
+            "title": "Account Dashboard",
+            "user_email": request.user.email if request.user.is_authenticated else None,
+        }
+    )
 
 # E - Edit View (Inline Form + List Table)
 def edit_account(request, pk):
@@ -69,13 +75,19 @@ def edit_account(request, pk):
     accounts = filter_accounts(query)
     accounts_page = get_paginated_queryset(request, accounts, per_page=10)
 
-    return render(request, "account/account_dashboard.html", {
-        "form": form,
-        "mode": "edit",
-        "account": account,
-        "query": query,
-        "accounts": accounts_page
-    })
+    return render(
+        request,
+        "account/account_dashboard.html",
+        {
+            "form": form,
+            "mode": "edit",
+            "account": account,
+            "query": query,
+            "accounts": accounts_page,
+            "title": "Edit Account",
+            "user_email": request.user.email if request.user.is_authenticated else None,
+        }
+    )
 
 # F - Delete View (Confirmation + Redirect)
 def account_delete(request, pk):
@@ -90,6 +102,8 @@ def account_delete(request, pk):
 
     # Optional: handle GET with a confirmation page
     return redirect(f"{reverse('account_dashboard')}?q={query}")
+
+
 
 
 
