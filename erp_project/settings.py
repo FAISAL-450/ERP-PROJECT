@@ -57,10 +57,13 @@ INSTALLED_APPS = [
     'home',
     'construction',
     'sales',
+    'finance',
     'project',
     'customer',
     'contractor',
     'accounts',
+    'account',
+
 ]
 
 # 🧱 Middleware

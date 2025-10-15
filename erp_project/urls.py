@@ -24,6 +24,7 @@ path('sales/', include('sales.urls')),
 path('project/', include('project.urls')),               # Project logic (used by construction)
 path('customer/', include('customer.urls')),             # Customer details (used by sales)
 path('contractor/', include('contractor.urls')),
-
+path('finance/', include('finance.urls')),
+path('account/', include('account.urls')),
 
 ]
