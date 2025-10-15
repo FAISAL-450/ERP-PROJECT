@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from customer.models import Account
+from .models import Account  # ✅ Corrected import
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 🔁 Reusable Pagination Function
