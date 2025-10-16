@@ -144,7 +144,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "construction" / "static",
+    BASE_DIR / "sales" / "static",
+    BASE_DIR / "finance" / "static",
+    BASE_DIR / "project" / "static",
+    BASE_DIR / "contractor" / "static",
+    BASE_DIR / "customer" / "static",
+    BASE_DIR / "account" / "static",
 ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
