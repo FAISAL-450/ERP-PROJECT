@@ -1,5 +1,14 @@
 from django.db import models
 
+# 🔢 Account Name for Dropdown
+ACCOUNT_NAME_CHOICES = [
+    ('Cash', 'Cash'),
+    ('Bank', 'Bank'),
+    ('Receivables', 'Receivables'),
+    ('Payables', 'Payables'),
+    ('Equity Capital', 'Equity Capital'),
+]
+
 # 🔢 Account Types for Dropdown
 ACCOUNT_TYPE_CHOICES = [
     ('ASSET', 'Asset'),
@@ -9,23 +18,41 @@ ACCOUNT_TYPE_CHOICES = [
     ('EXPENSE', 'Expense'),
 ]
 
+# 💱 Currency Options for Dropdown
+CURRENCY_CHOICES = [
+    ('USD', 'US Dollar'),
+    ('BDT', 'Bangladeshi Taka'),
+    ('EUR', 'Euro'),
+    ('INR', 'Indian Rupee'),
+    ('GBP', 'British Pound'),
+]
+
+# 🏢 Cost Center Options for Dropdown
+COST_CENTER_CHOICES = [
+    ('construction', 'Construction'),
+    ('sales', 'Sales'),
+    ('finance', 'Finance'),
+    ('admin', 'Administration'),
+    ('hr', 'Human Resources'),
+]
+
+# ✅ Status Dropdown
+STATUS_CHOICES = [
+    ('ACTIVE', 'Active'),
+    ('INACTIVE', 'Not Active'),
+]
+
 class Account(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
-    type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
-    description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    currency = models.CharField(max_length=10, default='USD')
-    cost_center = models.CharField(max_length=50, blank=True, null=True)
+    account_name = models.CharField(max_length=100, choices=ACCOUNT_NAME_CHOICES, default='General')
+    account_code = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES, default='Asset')
+    account_description = models.TextField(blank=True, null=True)
+    currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES, default='USD')
+    cost_center = models.CharField(max_length=50, choices=COST_CENTER_CHOICES, blank=True, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='ACTIVE')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['code']
-        verbose_name = 'Account'
-        verbose_name_plural = 'Accounts'
-
     def __str__(self):
-        return f"{self.code} - {self.name}"
-
+        return f"{self.account_name} - {self.account_code}"
