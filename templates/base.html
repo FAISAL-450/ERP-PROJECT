@@ -149,38 +149,38 @@
         {% endif %}
 
         <!-- Admin override for admin@DzignscapeProfessionals.onmicrosoft.com -->
-{% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
-  <li class="dropdown">
-    <a class="dropdown-toggle">
-      <span><i class="fas fa-hard-hat"></i> Construction</span>
-      <i class="fa fa-chevron-down toggle-icon"></i>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-      <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
-    </ul>
-  </li>
+        {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
+          <li class="dropdown">
+            <a class="dropdown-toggle">
+              <span><i class="fas fa-hard-hat"></i> Construction</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+              <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+            </ul>
+          </li>
 
-  <li class="dropdown">
-    <a class="dropdown-toggle">
-      <span><i class="fas fa-chart-line"></i> Sales</span>
-      <i class="fa fa-chevron-down toggle-icon"></i>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
-    </ul>
-  </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle">
+              <span><i class="fas fa-chart-line"></i> Sales</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'customer_dashboard' %}?department=sales">Customer Detailed</a></li>
+            </ul>
+          </li>
 
-  <li class="dropdown">
-    <a class="dropdown-toggle">
-      <span><i class="fas fa-hard-hat"></i> Finance</span>
-      <i class="fa fa-chevron-down toggle-icon"></i>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="{% url 'account:account_dashboard' %}?department=finance">Account Detailed</a></li>
-    </ul>
-  </li>
-{% endif %}
+          <li class="dropdown">
+            <a class="dropdown-toggle">
+              <span><i class="fas fa-coins"></i> Finance</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'account:account_dashboard' %}?department=finance">Account Detailed</a></li>
+            </ul>
+          </li>
+        {% endif %}
 
       {% endwith %}
     </ul>
