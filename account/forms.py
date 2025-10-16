@@ -45,7 +45,7 @@ class AccountForm(forms.ModelForm):
         }
 
     def clean_code(self):
-        code = self.cleaned_data['code']
+        code = self.cleaned_data.get('code', '')
         return code.upper().strip()
 
 

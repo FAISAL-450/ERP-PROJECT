@@ -7,7 +7,7 @@ from django.contrib import messages
 from .models import Account
 from .forms import AccountForm
 
-# B - Filtering Function
+# B - Filter Active Accounts by Search Query
 def filter_accounts(query=None):
     queryset = Account.objects.filter(is_active=True)
     if query:
@@ -18,7 +18,7 @@ def filter_accounts(query=None):
         )
     return queryset.order_by('code')
 
-# C - Reusable Pagination Function
+# C - Paginate Any Queryset
 def get_paginated_queryset(request, queryset, per_page=10):
     paginator = Paginator(queryset, per_page)
     page_number = request.GET.get("page")
@@ -29,34 +29,30 @@ def get_paginated_queryset(request, queryset, per_page=10):
     except EmptyPage:
         return paginator.page(paginator.num_pages)
 
-# D - Unified View (List View + Form Submission)
+# D - Unified Dashboard View (List + Create)
 def account_dashboard(request):
     query = request.GET.get("q", "").strip()
     accounts = filter_accounts(query)
-    accounts_page = get_paginated_queryset(request, accounts, per_page=10)
+    accounts_page = get_paginated_queryset(request, accounts)
 
     form = AccountForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            account = form.save(commit=False)
-            account.save()
+            form.save()
             messages.success(request, "✅ Account created successfully.")
             return redirect(f"{reverse('account_dashboard')}?q={query}")
         else:
             messages.error(request, "⚠️ Please correct the errors below.")
 
-    return render(
-        request,
-        "account/account_dashboard.html",
-        {
-            "accounts": accounts_page,
-            "query": query,
-            "form": form,
-            "mode": "list",
-            "title": "Account Dashboard",
-            "user_email": request.user.email if request.user.is_authenticated else None,
-        }
-    )
+    context = {
+        "accounts": accounts_page,
+        "query": query,
+        "form": form,
+        "mode": "list",
+        "title": "Account Dashboard",
+        "user_email": request.user.email if request.user.is_authenticated else None,
+    }
+    return render(request, "account/account_dashboard.html", context)
 
 # E - Edit View (Inline Form + List Table)
 def edit_account(request, pk):
@@ -73,23 +69,20 @@ def edit_account(request, pk):
             messages.error(request, "⚠️ Please correct the errors below.")
 
     accounts = filter_accounts(query)
-    accounts_page = get_paginated_queryset(request, accounts, per_page=10)
+    accounts_page = get_paginated_queryset(request, accounts)
 
-    return render(
-        request,
-        "account/account_dashboard.html",
-        {
-            "form": form,
-            "mode": "edit",
-            "account": account,
-            "query": query,
-            "accounts": accounts_page,
-            "title": "Edit Account",
-            "user_email": request.user.email if request.user.is_authenticated else None,
-        }
-    )
+    context = {
+        "form": form,
+        "mode": "edit",
+        "account": account,
+        "query": query,
+        "accounts": accounts_page,
+        "title": "Edit Account",
+        "user_email": request.user.email if request.user.is_authenticated else None,
+    }
+    return render(request, "account/account_dashboard.html", context)
 
-# F - Delete View (Confirmation + Redirect)
+# F - Delete View (POST Confirmation + Redirect)
 def account_delete(request, pk):
     account = get_object_or_404(Account, pk=pk)
     query = request.GET.get("q", "").strip()
@@ -100,10 +93,7 @@ def account_delete(request, pk):
         messages.success(request, f"🗑️ Account '{account_name}' deleted successfully.")
         return redirect(f"{reverse('account_dashboard')}?q={query}")
 
-    # Optional: handle GET with a confirmation page
+    # Optional: GET-based confirmation page (future enhancement)
     return redirect(f"{reverse('account_dashboard')}?q={query}")
-
-
-
 
 
