@@ -43,7 +43,7 @@ STATUS_CHOICES = [
 ]
 
 class Account(models.Model):
-    account_name = models.CharField(max_length=100, choices=ACCOUNT_NAME_CHOICES, default='General')
+    account_name = models.CharField(max_length=100, choices=ACCOUNT_NAME_CHOICES, default='Cash')
     account_code = models.CharField(max_length=20, unique=True, null=True, blank=True)
     account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES, default='Asset')
     account_description = models.TextField(blank=True, null=True)
