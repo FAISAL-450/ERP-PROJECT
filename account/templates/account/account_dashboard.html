@@ -34,7 +34,7 @@
               {{ field.label_tag }}
               {{ field }}
               {% if field.errors %}
-                <div class="field-error">{{ field.errors.0 }}</div>
+                <div class="field-error">{{ field.errors|join:", " }}</div>
               {% endif %}
             </div>
           {% endfor %}
@@ -45,7 +45,7 @@
             {% if mode == 'edit' %}Update{% else %}Save{% endif %}
           </button>
           {% if mode != 'list' %}
-            <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn gray">Cancel</a>
+            <a href="{% url 'account:account_dashboard' %}?q={{ query }}" class="btn gray">Cancel</a>
           {% endif %}
         </div>
       </form>
@@ -89,10 +89,10 @@
             <td>{{ account.currency }}</td>
             <td>{{ account.cost_center|default:"—" }}</td>
             <td>
-              <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn yellow action-btn">
+              <a href="{% url 'account:edit_account' account.id %}?q={{ query }}" class="btn yellow action-btn">
                 <i class="fas fa-edit"></i> Edit
               </a>
-              <form method="post" action="{% url 'account_delete' account.id %}?q={{ query }}" style="display:inline;">
+              <form method="post" action="{% url 'account:account_delete' account.id %}?q={{ query }}" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this account?');">
                   <i class="fas fa-trash-alt"></i> Delete
@@ -145,7 +145,6 @@
     }
   });
 </script>
-
 
 <!-- 🎨 Custom CSS -->
 <style>
