@@ -82,8 +82,9 @@ MIDDLEWARE = [
 DEPARTMENT_EMAIL_MAP = {
     'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
     'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
-    'admin@dzignscapeprofessionals.onmicrosoft.com': 'admin',  # or use 'construction,sales,finance' if multi-access
+    'admin@dzignscapeprofessionals.onmicrosoft.com': 'construction,sales,finance',
 }
+
 
 # 🔐 Azure AD Login Redirect
 LOGIN_URL = '/.auth/login/aad'
