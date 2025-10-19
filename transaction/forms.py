@@ -37,7 +37,7 @@ class TransactionForm(forms.ModelForm):
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows': 2,
+                'rows': 1,
                 'placeholder': 'Enter transaction description'
             }),
             'amount': forms.NumberInput(attrs={
