@@ -1,11 +1,18 @@
+# 📦 Core Imports
 from django.shortcuts import render
-from account.models import Account  # For finance 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-# 🔁 Reusable Pagination Function
+# 🧮 Models
+from account.models import Account  # Chart of Accounts for Finance
+
+# 🔁 Pagination Utility
 def get_paginated_queryset(request, queryset, per_page=10):
+    """
+    Paginate any queryset based on request 'page' parameter.
+    """
     paginator = Paginator(queryset, per_page)
     page_number = request.GET.get("page")
+
     try:
         return paginator.page(page_number)
     except PageNotAnInteger:
@@ -13,19 +20,30 @@ def get_paginated_queryset(request, queryset, per_page=10):
     except EmptyPage:
         return paginator.page(paginator.num_pages)
 
-# 💼 Finance Account Detailed View
+# 💼 Finance Account List View
 def finance_ac_list(request):
+    """
+    Renders a paginated list of finance accounts with optional search filtering.
+    """
     query = request.GET.get('q', '').strip()
-    accounts = Account.objects.all()
+    accounts_qs = Account.objects.all()
+
+    # 🔍 Apply search filter
     if query:
-        accounts = accounts.filter(name__icontains=query)
+        accounts_qs = accounts_qs.filter(name__icontains=query)
 
-    accounts_page = get_paginated_queryset(request, accounts, per_page=10)
+    # 📄 Paginate results
+    paginated_accounts = get_paginated_queryset(request, accounts_qs, per_page=10)
 
-    return render(request, 'finance/finance_ac_list.html', {
-        'accounts': accounts_page,
-        'query': query
-    })
+    # 📦 Context for template
+    context = {
+        'accounts': paginated_accounts,
+        'query': query,
+    }
+
+    return render(request, 'finance/finance_ac_list.html', context)
+
+
 
 
 

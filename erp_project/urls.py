@@ -27,6 +27,8 @@ path('contractor/', include('contractor.urls')),
 path('finance/', include('finance.urls')),
 path('account/', include('account.urls')),
 path('customerdetailed/', include('customerdetailed.urls')),
+path('accounts/', include('django.contrib.auth.urls')),  # ✅ Enables login/logout/password views
+
 
 
 ]

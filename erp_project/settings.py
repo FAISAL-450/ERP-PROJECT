@@ -10,6 +10,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
+# 🔐 Login Redirect Based on Environment
+if DEBUG:
+    LOGIN_URL = '/accounts/login/'  # Django's default login for local dev
+else:
+    LOGIN_URL = '/.auth/login/aad'  # Azure AAD login for production
+
 # 🌍 Hosts and CSRF
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
@@ -65,7 +71,6 @@ INSTALLED_APPS = [
     'accounts',
     'account',
     'customerdetailed',
-    
 ]
 
 # 🧱 Middleware
@@ -86,11 +91,7 @@ DEPARTMENT_EMAIL_MAP = {
     'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
     'admin@dzignscapeprofessionals.onmicrosoft.com': 'construction,sales,finance',
     'salim@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    
 }
-
-# 🔐 Azure AD Login Redirect
-LOGIN_URL = '/.auth/login/aad'
 
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'
@@ -145,3 +146,5 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
