@@ -10,30 +10,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🔐 Login Redirect Based on Environment
-if DEBUG:
-    LOGIN_URL = '/accounts/login/'  # Django's default login for local dev
-else:
-    LOGIN_URL = '/.auth/login/aad'  # Azure AAD login for production
-
-# 🌍 Hosts and CSRF
+# 🌍 Hosts and CSRF for Azure
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
         'DJANGO_ALLOWED_HOSTS',
-        '["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]'
+        '["erp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "erp-ac-app.azurewebsites.net"]
+    ALLOWED_HOSTS = ["erp-ac-app.azurewebsites.net"]
 
 try:
     CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        '["http://localhost", "http://127.0.0.1", "https://erp-ac-app.azurewebsites.net", "http://erp-ac-app.azurewebsites.net"]'
+        '["https://erp-ac-app.azurewebsites.net", "http://erp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
     CSRF_TRUSTED_ORIGINS = [
-        "http://localhost",
-        "http://127.0.0.1",
         "https://erp-ac-app.azurewebsites.net",
         "http://erp-ac-app.azurewebsites.net"
     ]
@@ -50,6 +42,7 @@ SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
 
 # 📦 Installed Apps
 INSTALLED_APPS = [
@@ -70,7 +63,9 @@ INSTALLED_APPS = [
     'contractor',
     'accounts',
     'account',
+    'transaction',
     'customerdetailed',
+    
 ]
 
 # 🧱 Middleware
@@ -91,7 +86,12 @@ DEPARTMENT_EMAIL_MAP = {
     'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
     'admin@dzignscapeprofessionals.onmicrosoft.com': 'construction,sales,finance',
     'salim@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+    
 }
+
+
+# 🔐 Azure AD Login Redirect
+LOGIN_URL = '/.auth/login/aad'
 
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'
@@ -114,11 +114,20 @@ TEMPLATES = [
     },
 ]
 
+USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
+
 # 🗄️ Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
@@ -138,13 +147,15 @@ USE_TZ = True
 
 # 📦 Static Files
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / "construction" / "static",
 ]
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
