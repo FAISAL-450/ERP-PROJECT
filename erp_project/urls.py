@@ -26,7 +26,6 @@ path('customer/', include('customer.urls')),             # Customer details (use
 path('contractor/', include('contractor.urls')),
 path('finance/', include('finance.urls')),
 path('account/', include('account.urls')),
-path('transaction/', include('transaction.urls')),
 path('customerdetailed/', include('customerdetailed.urls')),
 
 

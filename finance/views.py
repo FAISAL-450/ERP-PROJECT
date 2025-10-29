@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from account.models import Account  # For finance 
-from transaction.models import Transaction  # For finance 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 🔁 Reusable Pagination Function
@@ -28,17 +27,5 @@ def finance_ac_list(request):
         'query': query
     })
 
-# 💼 Finance Transaction Detailed View
-def finance_tn_list(request):
-    query = request.GET.get('q', '').strip()
-    transactions = Transaction.objects.all()
-    if query:
-        transactions = transactions.filter(status__icontains=query)
 
-    transactions_page = get_paginated_queryset(request, transactions, per_page=10)
-
-    return render(request, 'finance/finance_tn_list.html', {
-        'transactions': transactions_page,
-        'query': query
-    })
 
