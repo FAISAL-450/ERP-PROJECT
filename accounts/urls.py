@@ -1,10 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),  # Enables login/logout/password views
-    
+    path('', views.profile_list, name='profile_list'),
+    path('<int:user_id>/', views.profile_detail, name='profile_detail'),
 ]
 
 

@@ -81,12 +81,12 @@ MIDDLEWARE = [
 
 # 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
-    'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
-    'admin@dzignscapeprofessionals.onmicrosoft.com': 'construction,sales,finance',
-    'salim@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    
+    'elias@dzignscapeprofessionals.onmicrosoft.com': ['construction'],
+    'jakir@dzignscapeprofessionals.onmicrosoft.com': ['sales'],
+    'admin@dzignscapeprofessionals.onmicrosoft.com': ['construction', 'sales', 'finance'],
+    'salim@dzignscapeprofessionals.onmicrosoft.com': ['construction'],
 }
+
 
 
 # 🔐 Azure AD Login Redirect
@@ -108,6 +108,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.context_processors.user_profile',
             ],
         },
     },
