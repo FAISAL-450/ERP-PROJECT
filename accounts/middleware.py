@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
-from .models import Profile
+from .models import Profile, Department
 
 logger = logging.getLogger(__name__)
 
@@ -47,19 +47,21 @@ class EnsureProfileAndDepartmentMiddleware:
                 profile, _ = Profile.objects.get_or_create(user=user)
 
                 department_map = getattr(settings, "DEPARTMENT_EMAIL_MAP", {})
-                mapped_department = department_map.get(email)
+                mapped_departments = department_map.get(email)
 
-                valid_departments = dict(Profile._meta.get_field("department").choices).keys()
-                if mapped_department:
-                    if mapped_department in valid_departments:
-                        if profile.department != mapped_department:
-                            profile.department = mapped_department
-                            profile.save(update_fields=["department"])
-                            logger.info(f"✅ Profile updated → {email} assigned to '{mapped_department}'")
-                        else:
-                            logger.info(f"✅ Profile already correct → {email} is '{mapped_department}'")
-                    else:
-                        logger.warning(f"⚠️ Invalid department '{mapped_department}' for {email}")
+                if mapped_departments:
+                    # Convert comma-separated string to list if needed
+                    if isinstance(mapped_departments, str):
+                        mapped_departments = [d.strip() for d in mapped_departments.split(",")]
+
+                    valid_departments = []
+                    for dept_name in mapped_departments:
+                        if dept_name:
+                            dept_obj, _ = Department.objects.get_or_create(name=dept_name)
+                            valid_departments.append(dept_obj)
+
+                    profile.departments.set(valid_departments)
+                    logger.info(f"✅ Profile updated → {email} assigned to: {', '.join([d.name for d in valid_departments])}")
                 else:
                     logger.warning(f"⚠️ Unmapped email: {email} — no department assigned")
             else:
@@ -71,6 +73,8 @@ class EnsureProfileAndDepartmentMiddleware:
             return HttpResponse("Internal Server Error", status=500)
 
         return self.get_response(request)
+
+
 
 
 
