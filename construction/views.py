@@ -43,7 +43,19 @@ def construction_cd_list(request):
     })
 
 
+# 👷 Construction Customer Detailed List View
+def construction_doc_list(request):
+    query = request.GET.get('q', '').strip()
+    customerdetaileds = customerdetailed.objects.filter(department='construction')
+    if query:
+        customerdetaileds = customerdetaileds.filter(name__icontains=query)
 
+    customerdetaileds_page = get_paginated_queryset(request, customerdetaileds, per_page=10)
+
+    return render(request, 'construction/construction_doc_list.html', {
+        'customerdetaileds': customerdetaileds_page,
+        'query': query
+    })
 
 
 

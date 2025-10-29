@@ -122,7 +122,7 @@
         </li>
 
         <!-- Construction Section for Elias -->
-        {% if email == 'elias@dzignscapeprofessionals.onmicrosoft.com' %}
+       {% if email|lower in ['elias@dzignscapeprofessionals.onmicrosoft.com', 'salim@dzignscapeprofessionals.onmicrosoft.com'] %}
           <li class="dropdown">
             <a class="dropdown-toggle">
               <span><i class="fas fa-hard-hat"></i> Construction</span>
@@ -131,6 +131,8 @@
             <ul class="dropdown-menu">
               <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
               <li><a href="{% url 'contractor:contractor_dashboard' %}?department=construction">Contractor Detailed</a></li>
+
+              <li><a href="{% url 'customerdetailed:customerdetailed_dashboard' %}?department=construction">Customer</a></li>
             </ul>
           </li>
         {% endif %}
